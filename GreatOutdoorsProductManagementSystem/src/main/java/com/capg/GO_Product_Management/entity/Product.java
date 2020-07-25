@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.NotBlank;
@@ -87,18 +89,18 @@ public class Product {
 	@Pattern(regexp = "^[a-zA-z]+([\\s][a-zA-Z]+)*$",message = "Product Brand pattern invalid")
 	private String productBrand;
     
-/*	//TODO make @not null
-	@ManyToOne(targetEntity = UserDTO.class )
+	//TODO make @not null
+	@ManyToOne(targetEntity = User.class )
 	@JoinColumn(name = "ProductMaster_Id",nullable = false)
-	private UserDTO productMaster;
+	private User productMaster;
 	
-	public UserDTO getProductMaster() {
+	public User getProductMaster() {
 		return productMaster;
 	}
 
-	public void setProductMaster(UserDTO productMaster) {
+	public void setProductMaster(User productMaster) {
 		this.productMaster = productMaster;
-	}*/
+	}
 
 	public Long getProductId() {
 		return productId;
@@ -182,11 +184,11 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [productId=" + productId + ", productPrice=" + productPrice + ", productColour=" + productColour
-				+ ", productDimension=" + productDimension + ", productSpecification=" + productSpecification
-				+ ", productManufacturer=" + productManufacturer + ", productQuantity=" + productQuantity
-				+ ", productCategory=" + productCategory + ", productName=" + productName + ", productBrand="
-				+ productBrand + "]";
+		return "ProductDTO [productId=" + productId + ", productPrice=" + productPrice + ", productColour="
+				+ productColour + ", productDimension=" + productDimension + ", productSpecification="
+				+ productSpecification + ", productManufacturer=" + productManufacturer + ", productQuantity="
+				+ productQuantity + ", productCategory=" + productCategory + ", productName=" + productName
+				+ ", productBrand=" + productBrand + ", productMaster=" + productMaster + "]";
 	}
 	
 }
