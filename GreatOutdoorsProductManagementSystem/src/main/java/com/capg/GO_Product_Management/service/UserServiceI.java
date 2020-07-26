@@ -14,4 +14,6 @@ public interface UserServiceI {
 	public User signIn(String userName,String userPassword);
 	
 	public boolean signUp(Optional<Long> adminId,User newUser);
+
+	public User findById(long userId);
 }

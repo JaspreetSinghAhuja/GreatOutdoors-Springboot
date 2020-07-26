@@ -85,4 +85,10 @@ public class UserServiceImpl implements UserServiceI {
 		}
 	}
 
+	@Override
+	public User findById(long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

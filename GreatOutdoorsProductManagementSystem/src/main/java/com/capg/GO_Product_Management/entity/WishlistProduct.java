@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "Wishlist_Table")
+@Table(name = "Product_Wishlist_Table")
 public class WishlistProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
