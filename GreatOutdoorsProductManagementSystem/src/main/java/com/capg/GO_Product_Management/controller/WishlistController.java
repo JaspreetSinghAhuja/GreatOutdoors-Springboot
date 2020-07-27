@@ -4,6 +4,7 @@ import java.util.List;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,65 +19,63 @@ import com.capg.GO_Product_Management.entity.WishlistProduct;
 import com.capg.GO_Product_Management.exception.ProductException;
 import com.capg.GO_Product_Management.exception.UserException;
 import com.capg.GO_Product_Management.service.IWishlistProductService;
+import com.capg.GO_Product_Management.service.ProductServiceI;
 import com.capg.GO_Product_Management.service.UserServiceI;
 
 
 @CrossOrigin(origins="*")
 @RestController
 public class WishlistController {
-
 	@Autowired
-	private IWishlistProductService wishlistProductService;
-	
+	private ProductServiceI ProductService;
 	@Autowired
 	private UserServiceI userService;
+	@Autowired
+	private IWishlistProductService wishlistProductService;
  
 
-	 //////////////////////////////////////////////////////////////////////////////
-   
-  //*********Wishlist Operation***************
-   
-   /*
-    * This method will like the product with respective user and save it to the wishlist.
-    */
-   
-   @GetMapping(value="/user/{userId}/{productId}")
-   public void addToWislist(@PathVariable long userId,@PathVariable long productId) throws ProductException, UserException
-   {   
-	    if(!wishlistProductService.checkId(userId, productId))
-	    {
-	    	WishlistProduct product=new WishlistProduct(productId);
-	    	product.setUser(userService.findById(userId));
-	    	wishlistProductService.create(product);
-	    }  
-	    
-   }
-   
-   /*
-    * This method will delete the particular Product from wishlist with respect to the particular user.
-    */
-   @DeleteMapping(value="/user/{userId}/{productId}")
-   public void deleteProduct(@PathVariable long userId,@PathVariable long productId) throws ProductException
-   {   
-	   wishlistProductService.deleteProduct(userId, productId);
+	
+	 //*********Wishlist Operation***************
+	   
+	
+	
+	
+	   /*
+	    * This method will like the product with respective user and save it to the wishlist.
+	    */
+	   
 	 
-   }
-   
-   /*
-    * This method will return List of Product Liked by the particular user
-    */
-   
-   @GetMapping(value="/wishlistproduct/{userId}")
-	public List fetchProduct(@PathVariable long userId) throws ProductException
-	{  
-	    
-	    return wishlistProductService.retrive(userId);
+	@PostMapping(value="/addtoWishlist",consumes="application/json")
+	public String addToWishlist(@RequestBody WishlistProduct addItem) throws ProductException
+	{   
+		wishlistProductService.addToWishlist(addItem);
+		return "Added to wishlist";
+		
 	}
-  
-   
-   
-   
-   
-   ///////////////////////////////////////////
+	
+	   
+	   /*
+	    * This method will delete the particular Product from wishlist with respect to the particular user.
+	    */
+	@PostMapping(value="/deleteProduct",consumes="application/json")
+	public String deleteProduct(@RequestBody WishlistProduct removeItem ) throws ProductException
+	{   
+		wishlistProductService.deleteProduct(removeItem);
+		return "Removed from wishlist";
+		
+	}
+	
+	
+	   /*
+	    * This method will return List of Product Liked by the particular user
+	    */
+
+	
+	@GetMapping(value="/viewAll")
+	public List<WishlistProduct> viewAllItems()  throws ProductException {
+		List<WishlistProduct> list = wishlistProductService.viewAllItems();
+		return list;
+	}
+	
 
 }

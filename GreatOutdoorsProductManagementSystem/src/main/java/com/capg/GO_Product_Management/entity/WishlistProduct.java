@@ -2,6 +2,7 @@ package com.capg.GO_Product_Management.entity;
 
 import javax.persistence.Column;
 
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,19 +11,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.Range;
+
+
 
 @Entity
-@Table(name = "Product_Wishlist_Table")
+@Table(name = "WishlistTable")
 public class WishlistProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Range(min = 1, max = Long.MAX_VALUE)
 	private int productUserId;
 
-	@Column(length = 10)
+	@Column(length = 10,nullable=false)
 	private long productId;
 
 	@ManyToOne
-	@JoinColumn(name = "userId")
+	@JoinColumn(name = "userId",nullable=false)
 	private User user;
 
 	public WishlistProduct(long productId) {

@@ -1,5 +1,6 @@
 package com.capg.GO_Product_Management.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -7,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capg.GO_Product_Management.dao.IWishlistProductDao;
+import com.capg.GO_Product_Management.dao.WishlistProductdao;
 import com.capg.GO_Product_Management.entity.Product;
 import com.capg.GO_Product_Management.entity.WishlistProduct;
 import com.capg.GO_Product_Management.exception.ProductException;
@@ -17,11 +18,31 @@ import com.capg.GO_Product_Management.exception.ProductException;
 public class WishlistProductServiceImpl implements IWishlistProductService {
 
 	@Autowired
-	private IWishlistProductDao wishlistProductDao;
+	private WishlistProductdao wishlistProductdao;
+
 
 	@Override
-	public boolean create(WishlistProduct product) throws ProductException {
-        boolean status=wishlistProductDao.create(product);
+	public boolean addToWishlist(WishlistProduct addItem) throws ProductException  {
+		boolean status=wishlistProductdao.save(addItem) != null;
+		if(status)
+		{
+			return true;
+		}
+		else
+		{
+			throw new ProductException("Unable to insert in wishlist");
+		}
+	}
+	
+	/*
+	 * name - delete item from the wishlist
+	 * description - it will delete available item from the wishlist
+	 */
+	
+
+	@Override
+	public boolean deleteProduct(WishlistProduct removeItem) throws ProductException {
+		boolean status=wishlistProductdao.save(removeItem) != null;
 		if(status)
 		{
 			return true;
@@ -32,46 +53,23 @@ public class WishlistProductServiceImpl implements IWishlistProductService {
 		}
 	}
 
-	@Override
-	public List<Product> retrive(long userId) throws ProductException {
 
-		List<Product> ProductList = wishlistProductDao.retrive(userId);
-		if (ProductList.isEmpty()) {
-			throw new ProductException("Wishlist is empty");
-		} else {
-			return ProductList;
-		}
-	}
-
-	@Override
-	public boolean checkId(long userId, long productId) throws ProductException {
-
-//		boolean result = wishlistProductDao.checkId(userId, productId);
-//		
-		boolean result= wishlistProductDao.checkId(userId, productId);
-		if (result) {
-			throw new ProductException("PoductId already exist in wishlist");
-
-		} else {
-			return false;
-
-		}
-	}
-
-	@Override
-	public boolean deleteProduct(long userId, long productId) throws ProductException {
-
-		 boolean status=wishlistProductDao.deleteProduct(userId, productId);
-		 if(status)
-		 {
-			 return true;
-		 }
-		 else
-		 {
-			 System.out.println("last");
-			 throw new ProductException("Not able to delete Product"); 
-		 }
+	 /*
+     * showProductsFromWishlist
+     * descriptio:shows all products in the wishlist
+     */
 	
-	}	
-
+	
+	@Override
+	public List<WishlistProduct> viewAllItems() throws ProductException {
+		if(wishlistProductdao.count()==0)
+		{
+		List<WishlistProduct> list = new ArrayList<>();
+		return (List<WishlistProduct>) wishlistProductdao.findAll();
+	}
+		else
+		{
+			throw new ProductException("Wishlist is empty");
+		}
+	}
 }
